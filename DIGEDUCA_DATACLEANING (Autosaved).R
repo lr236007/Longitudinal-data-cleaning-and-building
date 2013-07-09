@@ -311,7 +311,9 @@ sgp_DIGEDUCA_Reading_HS <- studentGrowthPercentiles(panel.data=DIGEDUCA_MS_HS,
                    drop.nonsequential.grade.progression.variables=FALSE,
                    grade.progression=c(9,12))
                    
-names(sgp_DIGEDUCA_Reading_HS$SGPercentiles)
-
+names(sgp_DIGEDUCA_Reading_HS)
+names(sgp_DIGEDUCA_Reading_HS$SGPercentiles$READING.2012)
+names(sgp_DIGEDUCA_Reading_HS$Goodness_of_Fit$READING.2012)
+grid.draw(sgp_DIGEDUCA_Reading_HS$Goodness_of_Fit$READING.2012[["GRADE_9_2009-12_2012"]])
 
 setwd("/Users/Leslie/Repository/Dropbox/Eriko")

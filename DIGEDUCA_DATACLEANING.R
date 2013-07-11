@@ -16,7 +16,7 @@ DIGEDUCA_E_MS_HS_2011<-rename.vars(DIGEDUCA_E_MS_HS_2011, c("PRIMER_NOMBRE","SEG
 DIGEDUCA_E_MS_HS_2011<-rename.vars(DIGEDUCA_E_MS_HS_2011, c("COD_ESC_2006","COD_DEPA_2006","COD_MUNI_2006","COD_AREA_2006", "COD_SECT_2006", "COD_JORN_2006", "COD_PLAN_2006", "ENTIA_R_2006", "CODIGO_ESTABLECIMIENTO_2009", "CODIGO_DEPARTAMENTO_2009", "CODIGO_MUNICIPIO_2009", "CODIGO_JORNADA_2009", "CODIGO_NIVEL_2009", "CODIGO_SECTOR_2009", "CODIGO_AREA_2009", "EDAD_RECODE_2009", "SEXO_2009", "IE_IDENTIFICACION_ETNICA_2009", "IE_IDIOMA_MATERNO_2009", "BARCODE_2011", "COD_DEPA_2011", "COD_MUNI_2011","COD_ESTAB_2011", "EDAD_RECODE_2011", "SEXO_2011", "COD_AREA_2011", "COD_SECTOR_2011", "COD_JORNADA_2011", "IE_IDENTIFICACION_ETNICA_2011", "IE_IDIOMA_MATERNO_2011"), c("SCHOOL_2006", "STATE_2006", "DISTRICT_2006", "AREA_2006", "SECTOR_2006", "JORN_2006", "PLAN_2006", "ETHNICITY_2006", "SCHOOL_2009", "STATE_2009", "DISTRICT_2009", "JORN_2009", "LEVEL_2009", "SECTOR_2009", "AREA_2009", "AGE_2009", "SEX_2009", "ETHNICITY_2009", "LANG_2009", "MATCH_VAR_HS", "STATE_HS", "DISTRICT_HS","SCHOOL_HS", "AGE_HS", "SEX_HS", "AREA_HS", "SECTOR_HS", "JORN_HS", "ETHNICITY_HS", "LANG_HS"))
 
 #CHECK CODINGS AND REMOVE UNNECESSARY VARIABLES
-cor(DIGEDUCA_E_MS_HS_2011$SEX_2009, DIGEDUCA_E_MS_HS_2011$SEX_HS) #NEGATIVE, THEY RECODED THE VARIABLE OPPOSITE.
+#cor(DIGEDUCA_E_MS_HS_2011$SEX_2009, DIGEDUCA_E_MS_HS_2011$SEX_HS) #NEGATIVE, THEY RECODED THE VARIABLE OPPOSITE.
 head(DIGEDUCA_E_MS_HS_2011)
 DIGEDUCA_E_MS_HS_2011[34,]
 DIGEDUCA_E_MS_HS_2011<-remove.vars(DIGEDUCA_E_MS_HS_2011,"AREA_2006")
@@ -157,7 +157,7 @@ sgp_DIGEDUCA_Reading <- studentGrowthPercentiles(panel.data=DIGEDUCA_E_MS_HS,
                  
                  
         
-                   
+names(DIGEDUCA_E_MS_HS)                
 dim(DIGEDUCA_E_MS_HS)
 names(sgp_DIGEDUCA_Reading$SGPercentiles)
 names(sgp_DIGEDUCA_Reading$SGPercentiles$READING.2012)
@@ -169,6 +169,16 @@ write.csv(DIGEDUCA_3_SGP, file = "DIGEDUCA_3_SGP")
 help(SGP)
 require(grid)
 grid.draw(sgp_DIGEDUCA_Reading$Goodness_of_Fit$READING.2012[["GRADE_6_2006-9_2009-12_2012"]])
+
+#No math for 2006
+
+#sgp_DIGEDUCA_Math <- studentGrowthPercentiles(panel.data=DIGEDUCA_E_MS_HS,
+#                   sgp.labels=list(my.year=2012, my.subject="Math"),
+#                   panel.data.vnames=c("ID","GRADE_2006", "GRADE_2009", "GRADE_HS", "SS_MATH_2009", "SS_MATH_HS"),
+#                  percentile.cuts=c(1,35,65,99),
+#                  percuts.digits=2,
+#                   drop.nonsequential.grade.progression.variables=FALSE,
+#                   grade.progression=c(6,9,12))
 
 #merge SGP into de dataset, THIS GIVES AN ERROR.
 #??merge
@@ -518,5 +528,28 @@ grid.draw(sgp_DIGEDUCA_Reading_HS$Goodness_of_Fit$READING.2012[["GRADE_9_2009-12
 
 
 write.csv(DIGEDUCA_2_SGP, file = "DIGEDUCA_2_SGP")
+
+sgp_DIGEDUCA_MATH_HS <- studentGrowthPercentiles(panel.data=DIGEDUCA_MS_HS,
+                   sgp.labels=list(my.year=2012, my.subject="Math"),
+                   panel.data.vnames=c("ID", "GRADE_2009", "GRADE_HS", "SS_MATH_2009", "SS_MATH_HS"),
+                   percentile.cuts=c(1,35,65,99),
+                   percuts.digits=2,
+                   drop.nonsequential.grade.progression.variables=FALSE,
+                   grade.progression=c(9,12))
+
+
+
+                  
+dim(DIGEDUCA_MS_HS)
+names(sgp_DIGEDUCA_MATH_HS$SGPercentiles)
+names(sgp_DIGEDUCA_MATH_HS$SGPercentiles$MATH.2012)
+DIGEDUCA_2_SGP_MATH<-as.data.frame(sgp_DIGEDUCA_MATH_HS$SGPercentiles$MATH.2012$SGP)
+dim(DIGEDUCA_2_SGP_MATH)
+
+write.csv(DIGEDUCA_2_SGP_MATH, file = "DIGEDUCA_2_SGP_MATH")
+help(SGP)
+require(grid)
+names(sgp_DIGEDUCA_MATH_HS$Goodness_of_Fit$MATH.2012)
+grid.draw(sgp_DIGEDUCA_MATH_HS$Goodness_of_Fit$MATH.2012[["GRADE_9_2009-12_2012"]])
 
 setwd("/Users/Leslie/Repository/Dropbox/Eriko")

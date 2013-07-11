@@ -143,7 +143,7 @@ DIGEDUCA_E_MS_HS$GRADE_HS<-12
 DIGEDUCA_E_MS_HS$ID<-as.numeric(as.factor(with(DIGEDUCA_E_MS_HS,paste(FIRST_NAME, MIDDLE_NAME, LAST_NAME_1, LAST_NAME_2, STAND_READ_2006, LOGRO_READ_2006, SS_READ_2006, STAND_MATH_2006, LOGRO_MATH_2006, SS_READ_2009, SS_MATH_2009, STAND_READ_2009, STAND_MATH_2009, LOGRO_READ_2009, LOGRO_MATH_2009, SS_READ_HS, SS_MATH_HS, STAND_READ_HS, STAND_MATH_HS, LOGRO_READ_HS, LOGRO_MATH_HS, SCHOOL_2006, STATE_2006, DISTRICT_2006, ETHNICITY_2006, SCHOOL_2009, STATE_2009, DISTRICT_2009, ETHNICITY_2009, LANG_2009, STATE_HS, DISTRICT_HS,SCHOOL_HS, SEX_HS, ETHNICITY_HS, LANG_HS, sep="_"))))
 #save three year cohort dataset:
 
-write.csv(DIGEDUCA_E_MS_HS, file = "DIGEDUCA_E_MS_HS")
+write.csv(DIGEDUCA_E_MS_HS, file = "DIGEDUCA_E_MS_HS.csv")
 
 #check data fit of this N (it does not run it because the sample size is too small???)
 require(SGP)
@@ -159,13 +159,18 @@ sgp_DIGEDUCA_Reading <- studentGrowthPercentiles(panel.data=DIGEDUCA_E_MS_HS,
         
 names(DIGEDUCA_E_MS_HS)                
 dim(DIGEDUCA_E_MS_HS)
+names(sgp_DIGEDUCA_Reading)
 names(sgp_DIGEDUCA_Reading$SGPercentiles)
 names(sgp_DIGEDUCA_Reading$SGPercentiles$READING.2012)
-DIGEDUCA_3_SGP<-as.data.frame(sgp_DIGEDUCA_Reading$SGPercentiles$READING.2012$SGP)
+DIGEDUCA_3_SGP<-as.data.frame(cbind(sgp_DIGEDUCA_Reading$SGPercentiles$READING.2012$SGP, sgp_DIGEDUCA_Reading$SGPercentiles$READING.2012$ID))
 print(DIGEDUCA_3_SGP)
+colnames(DIGEDUCA_3_SGP)[1]<-"SGP"
+colnames(DIGEDUCA_3_SGP)[2]<-"ID"
 dim(DIGEDUCA_3_SGP)
-??match
-write.csv(DIGEDUCA_3_SGP, file = "DIGEDUCA_3_SGP")
+DIGEDUCA_E_MS_HS_SGP_READING<-merge(DIGEDUCA_E_MS_HS, DIGEDUCA_3_SGP, by.DIGEDUCA_E_MS_HS="ID", incomparables=NA)
+head(DIGEDUCA_E_MS_HS_SGP_READING)
+
+write.csv(DIGEDUCA_E_MS_HS_SGP_READING, file = "DIGEDUCA_E_MS_HS_SGP_READING")
 help(SGP)
 require(grid)
 grid.draw(sgp_DIGEDUCA_Reading$Goodness_of_Fit$READING.2012[["GRADE_6_2006-9_2009-12_2012"]])
@@ -516,10 +521,14 @@ names(sgp_DIGEDUCA_Reading_HS$SGPercentiles$READING.2012)
 dim(DIGEDUCA_MS_HS)
 names(sgp_DIGEDUCA_Reading_HS$SGPercentiles)
 names(sgp_DIGEDUCA_Reading_HS$SGPercentiles$READING.2012)
-DIGEDUCA_2_SGP<-as.data.frame(sgp_DIGEDUCA_Reading_HS$SGPercentiles$READING.2012$SGP)
-print(DIGEDUCA_3_SGP)
+DIGEDUCA_2_SGP<-as.data.frame(cbind(sgp_DIGEDUCA_Reading_HS$SGPercentiles$READING.2012$SGP, sgp_DIGEDUCA_Reading_HS$SGPercentiles$READING.2012$ID))
+head(DIGEDUCA_2_SGP)
 dim(DIGEDUCA_2_SGP)
-
+colnames(DIGEDUCA_2_SGP)[1]<-"SGP"
+colnames(DIGEDUCA_2_SGP)[2]<-"ID"
+dim(DIGEDUCA_2_SGP)
+DIGEDUCA_HS_SGP_READING<-merge(DIGEDUCA_MS_HS, DIGEDUCA_2_SGP, by.DIGEDUCA_MS_HS="ID", incomparables=NA)
+head(DIGEDUCA_HS_SGP_READING)
 
 help(SGP)
 require(grid)
@@ -543,10 +552,19 @@ sgp_DIGEDUCA_MATH_HS <- studentGrowthPercentiles(panel.data=DIGEDUCA_MS_HS,
 dim(DIGEDUCA_MS_HS)
 names(sgp_DIGEDUCA_MATH_HS$SGPercentiles)
 names(sgp_DIGEDUCA_MATH_HS$SGPercentiles$MATH.2012)
-DIGEDUCA_2_SGP_MATH<-as.data.frame(sgp_DIGEDUCA_MATH_HS$SGPercentiles$MATH.2012$SGP)
+DIGEDUCA_2_SGP_MATH<-as.data.frame(cbind(sgp_DIGEDUCA_MATH_HS$SGPercentiles$MATH.2012$SGP, sgp_DIGEDUCA_MATH_HS$SGPercentiles$MATH.2012$ID))
 dim(DIGEDUCA_2_SGP_MATH)
+colnames(DIGEDUCA_2_SGP_MATH)[1]<-"SGP_MATH"
+colnames(DIGEDUCA_2_SGP_MATH)[2]<-"ID"
+head(DIGEDUCA_MS_HS)
+head(DIGEDUCA_2_SGP)
+head(DIGEDUCA_2_SGP_MATH)
+DIGEDUCA_HS_SGP<-merge(DIGEDUCA_HS_SGP_READING, DIGEDUCA_2_SGP_MATH, by.DIGEDUCA_HS_SGP_READING="ID", incomparables=NA)
 
-write.csv(DIGEDUCA_2_SGP_MATH, file = "DIGEDUCA_2_SGP_MATH")
+head(DIGEDUCA_HS_SGP)
+
+write.csv(DIGEDUCA_HS_SGP, file = "DIGEDUCA_HS_SGP.csv")
+
 help(SGP)
 require(grid)
 names(sgp_DIGEDUCA_MATH_HS$Goodness_of_Fit$MATH.2012)

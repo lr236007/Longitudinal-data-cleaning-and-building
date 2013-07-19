@@ -195,6 +195,8 @@ DIGEDUCA_2009_2011<-read.csv('Resultados 2009_2011.csv',header=TRUE)
 names(DIGEDUCA_2009_2011)
 dim(DIGEDUCA_2009_2011)
 head(DIGEDUCA_2009_2011)
+
+
 DIGEDUCA_MS_HS_2011<-rename.vars(DIGEDUCA_2009_2011, c(
 	"PRIMER_NOMBRE",
 	"SEGUNDO_NOMBRE",
@@ -323,7 +325,11 @@ DIGEDUCA_MS_HS_2011$LANG_HS <-as.numeric(DIGEDUCA_MS_HS_2011$LANG_HS, 'NA'=TRUE)
 summary(DIGEDUCA_MS_HS_2012)
 DIGEDUCA_MS_HS_2011[6,]
 
-
+par(mfrow=c(2,2))
+hist(DIGEDUCA_MS_HS_2011$SS_READ_2009, main= "9th Grade Reading Scores Distribution")
+hist(DIGEDUCA_MS_HS_2011$SS_MATH_2009, main= "9th Grade Math Scores Distribution")
+hist(DIGEDUCA_MS_HS_2011$SS_READ_HS, main= "High School Reading Scores Distribution")
+hist(DIGEDUCA_MS_HS_2011$SS_MATH_HS, main= "High School Math Scores Distribution")
 
 
 
@@ -571,3 +577,105 @@ names(sgp_DIGEDUCA_MATH_HS$Goodness_of_Fit$MATH.2012)
 grid.draw(sgp_DIGEDUCA_MATH_HS$Goodness_of_Fit$MATH.2012[["GRADE_9_2009-12_2012"]])
 
 setwd("/Users/Leslie/Repository/Dropbox/Eriko")
+
+#did the long formatting in SPSS
+
+
+DIGEDUCA_LONG_FORMAT<-read.csv('DIGEDUCA_LONG_FORMAT_REC.csv', header=TRUE)
+head(DIGEDUCA_LONG_FORMAT)
+DIGEDUCA_LONG_FORMAT[1:16,]
+DIGEDUCA_LONG_FORMAT[17:32,]
+DIGEDUCA_LONG_FORMAT[33:48,]
+
+
+write.csv(DIGEDUCA_LONG_FORMAT, file = "GUATEMALA_LONG_DATA.csv")
+
+
+###########################################
+###
+### Cleanup of LONG file
+###
+###########################################
+
+### Load SGP Package
+
+require(SGP)
+require(data.table)
+require(gtools)
+require(gdata)
+
+
+
+### Load data
+
+Guatemala_Data_LONG <- read.csv("/Users/Leslie/Repository/Dropbox/Eriko/GUATEMALA_DATA_LONG.csv")
+names(Guatemala_Data_LONG)
+head(Guatemala_Data_LONG)
+dim(Guatemala_Data_LONG)
+
+### NULL out unused variables
+Guatemala_Data_LONG$SEX<-Guatemala_Data_LONG$SEX_HS
+
+my.variables.to.null.out <- c( "RNUMBER", "SGP", "SGP_MATH","Index2", "Index1")
+for (i in my.variables.to.null.out) {
+	Guatemala_Data_LONG[[i]] <- NULL
+}
+
+
+### Convert to data.table
+
+Guatemala_Data_LONG <- as.data.table(Guatemala_Data_LONG)
+
+### Tidy up variables
+
+Guatemala_Data_LONG$ID  <- as.character(Guatemala_Data_LONG$ID)
+
+levels(Guatemala_Data_LONG$FIRST_NAME) <- sapply(levels(Guatemala_Data_LONG$FIRST_NAME), capwords)
+levels(Guatemala_Data_LONG$MIDDLE_NAME) <- sapply(levels(Guatemala_Data_LONG$MIDDLE_NAME), capwords)
+levels(Guatemala_Data_LONG$LAST_NAME_1) <- sapply(levels(Guatemala_Data_LONG$LAST_NAME_1), capwords)
+levels(Guatemala_Data_LONG$LAST_NAME_2) <- sapply(levels(Guatemala_Data_LONG$LAST_NAME_2), capwords)
+
+Guatemala_Data_LONG$SEX <- factor(Guatemala_Data_LONG$SEX, levels=0:1, labels=c("Female", "Male"))
+
+setnames(Guatemala_Data_LONG, "SCALE", "SCALE_SCORE")
+setnames(Guatemala_Data_LONG, "ACHIEVEMENT", "ACHIEVEMENT_LEVEL")
+
+my.achievement.levels <- c("Unsatisfactory", "Needs improvement", "Satisfactory", "Excelent")
+Guatemala_Data_LONG$ACHIEVEMENT_LEVEL <- factor(Guatemala_Data_LONG$ACHIEVEMENT_LEVEL, levels=1:4, labels=my.achievement.levels, ordered=TRUE)
+
+Guatemala_Data_LONG$LOGRO <- factor(Guatemala_Data_LONG$LOGRO, levels=0:1, labels=c("No", "Yes"))
+
+setnames(Guatemala_Data_LONG, "STATE", "STATE_NUMBER")
+setnames(Guatemala_Data_LONG, "DISTRICT", "DISTRICT_NUMBER")
+setnames(Guatemala_Data_LONG, "SCHOOL", "SCHOOL_NUMBER")
+
+my.ethnicities <- c("Maya", "Ladino", "Garifuna", "Xinka", "Foreign")
+Guatemala_Data_LONG$ETHNICITY <- factor(Guatemala_Data_LONG$ETHNICITY, levels=1:5, labels=my.ethnicities)
+
+my.languages <- c("Spanish", "Maya", "Garifuna", "Xinka", "Foreign")
+Guatemala_Data_LONG$LANGUAGE <- factor(Guatemala_Data_LONG$LANGUAGE, levels=1:5, labels=my.languages)
+
+Guatemala_Data_LONG$SCHOOL_NUMBER <- as.character(Guatemala_Data_LONG$SCHOOL_NUMBER)
+
+Guatemala_Data_LONG$YEAR <- as.character(Guatemala_Data_LONG$YEAR)
+
+levels(Guatemala_Data_LONG$CONTENT) <- c("MATHEMATICS", "READING")
+Guatemala_Data_LONG$CONTENT <- as.character(Guatemala_Data_LONG$CONTENT)
+
+my.states<-c("Ciudad Capital", "Guatemala", "El Progreso", "Sacatepequez", "Chimaltenango", "Escuintla", "Santa Rosa", "Solola", "Totonicapán", "Quetzaltenango", "Suchitepequez", "Retalhuleu", "San Marcos", "Huehuetenango", "Quiche", "Baja Verapaz", "Alta Verapaz", "Petén", "Izabal", "Zacapa", "Chiquimula", "Jalapa", "Jutiapa")
+Guatemala_Data_LONG$STATE_NAME <- factor(Guatemala_Data_LONG$STATE_NUMBER, levels=0:22, labels=my.states)
+
+my.districts<-as.data.table(read.csv("DISTRICT_LABELS.csv", header=FALSE))
+names(my.districts) <- c("DISTRICT_NUMBER", "DISTRICT_NAME")
+setkey(my.districts, DISTRICT_NUMBER)
+setkey(Guatemala_Data_LONG, DISTRICT_NUMBER)
+
+Guatemala_Data_LONG <- my.districts[Guatemala_Data_LONG]
+#SOMETHING HAPPENED WITH THE OTHER LABELS????
+head(Guatemala_Data_LONG)
+
+
+table(Guatemala_Data_LONG$GRADE, Guatemala_Data_LONG$YEAR)
+head(Guatemala_Data_LONG)
+
+save(Guatemala_Data_LONG, file="Guatemala_Data_LONG.Rdata")

@@ -1,0 +1,29 @@
+### GUATEMALA/GUA
+
+SGPstateData[["GUA"]][["Achievement"]][["Cutscores"]] <- 
+	list(READING=list(
+		GRADE_9=c(-0.387, 0.341,  0.823),
+		GRADE_12=c(-0.129, 0.469, 0.879),
+	NUMERACY=list(
+	       GRADE_9=c(-0.089, 0.500, 1.365),
+		GRADE_12=c(0.019, 1.053, 1.427)))
+
+SGPstateData[["GUA"]][["Achievement"]][["Levels"]] <- list(
+	     	Labels=c("Insatisfactorio", "Necesita mejorar", "Satisfactorio", "Excelente"),
+		Proficient=c("Not Proficient", "Proficient", "Proficient"))
+
+SGPstateData[["GUA"]][["Crecimiento"]][["Niveles"]] <- c("Muy bajo", "Bajo", "Típico", "Alto", "Muy alto")
+SGPstateData[["GUA"]][["Crecimiento"]][["System_Type"]] <- "Cohort Referenced"
+SGPstateData[["GUA"]][["Crecimiento"]][["Puntos de corte"]] <- list(Cuts=c(20, 40, 60, 80), Labels=list("1st-19th", "20th-39th", "40th-59th", "60th-79th", "80th-99th"))
+
+SGPstateData[["GUA"]][["Información de Evaluaciones"]][["Grados Evaluados"]] <- c(9,12)
+
+SGPstateData[["GUA"]][["Información en el Reporte del Estudiante"]] <- list(
+		Content_Areas_Labels=list(NUMERACY="Matemáticas", READING="Lectura"),
+		Grades_Reported=list(NUMERACY=c(9,12), READING=c(9,12)),
+		Achievement_Level_Labels=list(
+			"Insatisfactorio"="Insatisfactorio",
+			"Necesita mejorar"="Necesita mejorar",
+		      "Satisfactorio"="Satisfactorio",
+			"Excelente"="Excelente"))
+

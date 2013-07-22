@@ -20,19 +20,6 @@ dim(REAULA_SGP)
 
 REAULA_SGP$GENDER <- factor(REAULA_SGP$GENDER, levels=1:2, labels=c("Male", "Female"))
 my.ethnicities <- c("Non_maya", "Maya")
-#
-#REAULA_SGP$ETHNICITY <- factor(REAULA_SGP$ETHNICITY, levels=0:1, labels=my.ethnicities)
-#my.languages <- c("Spanish", "Maya", "Garifuna", "Xinka", "Foreign")
-#Guatemala_Data_LONG$LANGUAGE <- factor(Guatemala_Data_LONG$LANGUAGE, levels=1:5, labels=my.languages)
-
-
-#my.states<-c("Ciudad Capital", "Guatemala", "El Progreso", "Sacatepequez", "Chimaltenango", "Escuintla", "Santa Rosa", "Solola", "Totonicapán", "Quetzaltenango", "Suchitepequez", "Retalhuleu", "San Marcos", "Huehuetenango", "Quiche", "Baja Verapaz", "Alta Verapaz", "Petén", "Izabal", "Zacapa", "Chiquimula", "Jalapa", "Jutiapa")
-#Guatemala_Data_LONG$STATE_NAME <- factor(Guatemala_Data_LONG$STATE_NUMBER, levels=0:22, labels=my.states)
-
-#my.districts<-as.data.table(read.csv("DISTRICT_LABELS.csv", header=FALSE))
-#names(my.districts) <- c("DISTRICT_NUMBER", "DISTRICT_NAME")
-#setkey(my.districts, DISTRICT_NUMBER)
-#setkey(Guatemala_Data_LONG, DISTRICT_NUMBER)
 
 
 table(items$GENDER)

@@ -678,3 +678,22 @@ table(Guatemala_Data_LONG$GRADE, Guatemala_Data_LONG$YEAR)
 head(Guatemala_Data_LONG)
 
 save(Guatemala_Data_LONG, file="Guatemala_Data_LONG.Rdata")
+
+#More data cleaning before analyses in SGP
+#CREATE THE FOLLOWING FACTOR VARIABLES:
+
+Guatemala_Data_LONG$VALID_CASE <- "VALID_CASE"
+
+Guatemala_Data_LONG$SCHOOL_ENROLLMENT_STATUS <- factor(1, levels=0:1, labels=c("Enrolled School: No", "Enrolled School: Yes"))
+Guatemala_Data_LONG$DISTRICT_ENROLLMENT_STATUS <- factor(1, levels=0:1, labels=c("Enrolled District: No", "Enrolled District: Yes"))
+Guatemala_Data_LONG$STATE_ENROLLMENT_STATUS <- factor(1, levels=0:1, labels=c("Enrolled State: No", "Enrolled State: Yes"))
+save(Guatemala_Data_LONG, file="Guatemala_Data_LONG.Rdata")
+
+Guatemala_SGP@Data$SCHOOL_ENROLLMENT_STATUS <- factor(1, levels=0:1, labels=c("Enrolled School: No", "Enrolled School: Yes"))
+Guatemala_SGP@Data$DISTRICT_ENROLLMENT_STATUS <- factor(1, levels=0:1, labels=c("Enrolled District: No", "Enrolled District: Yes"))
+Guatemala_SGP@Data$STATE_ENROLLMENT_STATUS <- factor(1, levels=0:1, labels=c("Enrolled State: No", "Enrolled State: Yes"))
+save(Guatemala_SGP, file="Guatemala_SGP.Rdata")
+
+Guatemala_Data_LONG$LAST_NAME <- paste(Guatemala_Data_LONG$LAST_NAME_1, Guatemala_Data_LONG$LAST_NAME_2)
+Guatemala_SGP@Data$LAST_NAME <- paste(Guatemala_SGP@Data$LAST_NAME_1, Guatemala_SGP@Data$LAST_NAME_2)
+
